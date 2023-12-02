@@ -10,3 +10,6 @@ async def username_is_unique(username):
 async def email_is_unique(email):
     user = await User.find_one(User.email != email)
     return user is not None
+
+async def get_user_by_email(email):
+    return await User.find_one(User.email == email)

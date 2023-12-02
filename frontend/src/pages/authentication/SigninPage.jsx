@@ -18,9 +18,32 @@ const CustomLink = React.forwardRef((props, ref) => (
 CustomLink.displayName = 'CustomLink';
 
 export function SigninPage() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // TODO: Add form submission logic here
+    const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+
+    //email and password valid check functionality here
+    try {
+        const response = await fetch('http://localhost:8000/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          console.log('nice');
+        } else {
+          const data = await response.json();
+          alert(data.detail);
+        }
+      } catch (error) {
+        alert(error);
+      }
+
     console.log('Form submitted');
   };
 

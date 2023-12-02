@@ -5,4 +5,7 @@ class User(Document):
     email: str
     password: str
     
-    
+
+class SignIn(Document):
+    email: str
+    password: str

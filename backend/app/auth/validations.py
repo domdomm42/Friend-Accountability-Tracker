@@ -51,3 +51,12 @@ async def validate_password(username: str, password: str) -> None:
             substring = password[i : i + c.INVALID_USERNAME_PASSWORD_SUBSTR_LEN + 1]
             if substring in username:
                 raise InvalidInputException("Password cannot contain a substring of username.")
+            
+
+async def validate_signin(email: str, password: str) -> None:
+    user = await auth_db.get_user_by_email(email)
+    if not user:
+        raise InvalidInputException("Invalid email or password.")
+    
+    if user.password != password:
+        raise InvalidInputException("Invalid email or password.")
