@@ -2,3 +2,4 @@ beanie
 fastapi
 uvicorn
 pyhibp
+pydantic

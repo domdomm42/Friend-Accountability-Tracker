@@ -1,4 +1,5 @@
 from beanie import Document
+from pydantic import BaseModel
 
 class User(Document):
     username: str
@@ -6,6 +7,6 @@ class User(Document):
     password: str
     
 
-class SignIn(Document):
+class SignIn(BaseModel):
     email: str
     password: str
