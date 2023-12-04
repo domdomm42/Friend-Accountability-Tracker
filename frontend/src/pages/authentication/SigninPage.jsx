@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,13 +18,14 @@ const CustomLink = React.forwardRef((props, ref) => (
 CustomLink.displayName = 'CustomLink';
 
 export function SigninPage() {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
 
-    //email and password valid check functionality here
+    //validation of user credentials
     try {
         const response = await fetch('http://localhost:8000/signin', {
           method: 'POST',
@@ -35,7 +36,8 @@ export function SigninPage() {
         });
 
         if (response.ok) {
-          console.log('nice');
+          console.log('User credentials validated successfully');
+          navigate('/');
         } else {
           const data = await response.json();
           alert(data.detail);

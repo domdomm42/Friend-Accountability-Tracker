@@ -30,6 +30,7 @@ async def signup_user(user: User):
 @router.post("/signin")
 async def signin_user(user: SignIn):
     try:
+        #validate the inputted email and password
         await validate_signin(user.email, user.password)
         print("email and password")
     except InvalidInputException as e:

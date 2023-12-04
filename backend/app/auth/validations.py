@@ -3,6 +3,7 @@ from ..exceptions import InvalidInputException, NotUniqueException
 from pyhibp import pwnedpasswords as pw
 from ..helpers import is_email
 from .. import constants as c
+from bcrypt import checkpw
 
 import pyhibp
 
@@ -54,9 +55,10 @@ async def validate_password(username: str, password: str) -> None:
             
 
 async def validate_signin(email: str, password: str) -> None:
+    #fetches user if it exists by email
     user = await auth_db.get_user_by_email(email)
     if not user:
         raise InvalidInputException("Invalid email or password.")
-    
-    if user.password != password:
+    #password validation
+    if not checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
         raise InvalidInputException("Invalid email or password.")
