@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv("../.env")
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,7 +18,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(user_router)
-
 
 origins = ["http://127.0.0.1:5173", "http://localhost:5173"]
 

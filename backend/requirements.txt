@@ -4,3 +4,4 @@ uvicorn
 pyhibp
 pydantic
 bcrypt
+PyJWT
