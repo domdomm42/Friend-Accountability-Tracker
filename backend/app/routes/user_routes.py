@@ -50,16 +50,27 @@ async def signin_user(response: Response, user: SignIn):
     #set the access token as a cookie
     response.set_cookie(
         key="access_token",
-        value=f"Bearer {access_token}",
+        value=access_token,
         httponly=True,
-        secure=False,
+        secure=True,
         samesite="strict",
     )
     
     return {"message": "Successfully signed in"}
 
-#This route is just here temporarily for testing access tokens
-@router.get("/protected", response_model=User)
+#keeping this here now incase we need to test access tokens if they break again
+#@router.get("/test")
+#async def test(response: Response):
+    #access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiY3J5cHRUZXN0QGdtYWlsLmNvbSIsImV4cCI6MTcwMjEyNDc0OH0.Pirb2j-uMnuOmtwWuM-anxrN17eFtJeAAJJPHu1-0WA"
+    #response.set_cookie(
+        #key="access_token",
+        #value=access_token,
+        #httponly=True,
+        #secure=True,
+        #samesite="strict",
+    #)
+    #return {"message": "test"}
+    
+@router.get("/profile", response_model=User)
 async def read_users_me(current_user: str = Depends(get_current_user)):
     return current_user
-

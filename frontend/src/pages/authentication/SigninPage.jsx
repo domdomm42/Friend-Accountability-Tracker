@@ -33,11 +33,14 @@ export function SigninPage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ email, password }),
+          //this is to send cookies to backend
+          credentials: 'include',
         });
 
         if (response.ok) {
           console.log('User credentials validated successfully');
-          navigate('/');
+          //currently sending user to profile page after signin. Change this later to dashboard or whatever we need
+          navigate('/profile');
         } else {
           const data = await response.json();
           alert(data.detail);

@@ -2,7 +2,7 @@ from os import getenv
 import re
 from jwt import encode, decode, InvalidTokenError, DecodeError, ExpiredSignatureError
 from datetime import datetime, timedelta
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status, Depends, Cookie
 from fastapi.security import OAuth2PasswordBearer
 from .auth.auth_db import get_user_by_email
 
@@ -49,8 +49,13 @@ def verify_token(token: str) -> dict:
     return decoded_token
 
 #gets the current user from the access token
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    payload = verify_token(token)
+async def get_current_user(access_token: str = Cookie(None)):
+    if not access_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+        )
+    payload = verify_token(access_token)
     if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
