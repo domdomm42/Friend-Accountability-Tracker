@@ -5,3 +5,4 @@ pyhibp
 pydantic
 bcrypt
 PyJWT
+python-dotenv
