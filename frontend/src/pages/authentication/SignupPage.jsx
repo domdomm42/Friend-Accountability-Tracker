@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,6 +18,7 @@ const CustomLink = React.forwardRef((props, ref) => (
 CustomLink.displayName = 'CustomLink';
 
 export function SignupPage() {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,6 +41,8 @@ export function SignupPage() {
 
         if (response.ok) {
           console.log('nice');
+          //navigating the user to signin after successful signup for now but we can change this later
+          navigate('/signin')
         } else {
           const data = await response.json();
           alert(data.detail);

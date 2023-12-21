@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Response
 from ..auth.auth_db import register_user
-from ..auth.validations import validate_email, validate_password, validate_username, validate_signin
+from ..auth.validations import validate_email, validate_password, validate_username, validate_signin, validate_user_exists
 from ..exceptions import InvalidInputException, NotUniqueException
 from ..models.user import User, SignIn
 from ..helpers import create_access_token, get_current_user
@@ -70,7 +70,17 @@ async def signin_user(response: Response, user: SignIn):
         #samesite="strict",
     #)
     #return {"message": "test"}
-    
+
+#returns the current logged in user from the access token    
 @router.get("/profile", response_model=User)
 async def read_users_me(current_user: str = Depends(get_current_user)):
     return current_user
+
+#returns the user if it exists by username
+@router.get("/profile/{username}", response_model=User)
+async def read_user(username: str):
+    user = await validate_user_exists(username)    
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return user

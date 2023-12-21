@@ -17,3 +17,6 @@ async def email_is_unique(email):
 
 async def get_user_by_email(email):
     return await User.find_one(User.email == email)
+
+async def get_user_by_username(username):
+    return await User.find_one(User.username == username)

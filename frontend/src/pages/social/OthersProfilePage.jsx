@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import AppBar from '@mui/material/AppBar';
@@ -11,25 +11,28 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CssBaseline from '@mui/material/CssBaseline';
 
 
-const ProfilePage = () => {
-    const [user, setUser] = useState({});
+const OthersProfilePage = () => {
+    const { username } = useParams();
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const response = await fetch('http://localhost:8000/profile', { credentials: 'include' });
+                const response = await fetch(`http://localhost:8000/profile/${username}`, { credentials: 'include' });
                 //user is redirected to signin page if not authenticated
                 if (response.status === 401) navigate('/signin');
                 const data = await response.json();
                 setUser(data);
             } catch (error) {
+                //just redirecting user to their own profile page for now if user doesnt exist. to be changed later.
+                navigate('/profile');
                 console.error('Error fetching profile data:', error);
             }
         };
 
         fetchProfileData();
-    }, []);
+    }, [username, navigate]);
 
     return (
         <>
@@ -52,13 +55,17 @@ const ProfilePage = () => {
                 </AppBar>
             </Box>
             <Container maxWidth="xl" sx={{ padding: '60px' }}> 
-                <Typography variant="h3" sx={{ paddingBottom: '40px' }}>Welcome, {user.username}!</Typography>
-                <Typography variant="body1">Email: {user.email}</Typography>
-                <Typography variant="body1">Muahahaha finally it works</Typography>
-                {/* other profile stuff here i guess */}
+                {user && (
+                    <>
+                        <Typography variant="h3" sx={{ paddingBottom: '40px' }}>You are viewing {user.username}'s profile!</Typography>
+                        <Typography variant="body1">Email: {user.email}</Typography>
+                        <Typography variant="body1">TODO: Add friend button</Typography>
+                        {/* other profile stuff here i guess */}
+                    </>
+                )}
             </Container>
         </>
     );
 };
 
-export default ProfilePage;
+export default OthersProfilePage;

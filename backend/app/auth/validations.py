@@ -4,6 +4,7 @@ from pyhibp import pwnedpasswords as pw
 from ..helpers import is_email
 from .. import constants as c
 from bcrypt import checkpw
+from ..models.user import User
 
 import pyhibp
 
@@ -62,3 +63,11 @@ async def validate_signin(email: str, password: str) -> None:
     #password validation
     if not checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
         raise InvalidInputException("Invalid email or password.")
+    
+async def validate_user_exists(username: str) -> User:
+    #fetches user if it exists by username
+    user = await auth_db.get_user_by_username(username)
+    if not user:
+        raise InvalidInputException("User does not exist.")
+    
+    return user
